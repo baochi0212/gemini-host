@@ -13,30 +13,30 @@ cost_of_response = 0
 API_KEY = "AIzaSyDo7DTaM8MCyuz-nYhmXtunjj6vK6US3MA"
 # API_KEY = sys.argv[1]
 url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=" + API_KEY
-
-def make_request(question_input: str):
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": f"{question_input}"},
-        ]
-    )
-    return response
+url_token = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:countTokens?key=" + API_KEY
 
 
-st.header("Gemini cua tao")
+st.header("gemini cua tao")
 
 st.markdown("""---""")
 
-question_input = st.text_area("Enter question")
+question_input = st.text_area("Prompt")
+temp = st.slider(
+    "Temperature", 0., 1., 0., 0.01)
+
 print("Question input", question_input)
-rerun_button = st.button("Rerun")
+rerun_button = st.button("Regenerate")
 
 st.markdown("""---""")
-def make_response(text):
+def make_response(text, temp):
     headers = {
         "Content-Type": "application/json"
     }
+    token_data = {
+      "contents": [{
+        "parts":[{
+          "text": "Write a story about a magic backpack."}]}]}
+    num_tokens = requests.post(url_token, headers=headers, json=token_data).json()["totalTokens"]
 
     data = {
         "contents": [{
@@ -66,28 +66,30 @@ def make_response(text):
             "stopSequences": [
                 "Title"
             ],
-            "temperature": 0.8,
-            "maxOutputTokens": 2048,
+            "temperature": temp,
+            "maxOutputTokens": 4096,
             "topP": 0.9,
             "topK": 50
         }
     }
 
     response = requests.post(url, headers=headers, json=data)
-    return response
+    return response, num_tokens
 if question_input:
-    response = make_response(question_input)
-
+    response, num_tokens = make_response(question_input, temp)
+    st.write("Num tokens:")
+    st.write(num_tokens)
 else:
     pass
 
 if rerun_button:
-    response = make_response(question_input)
+    response, _ = make_response(question_input, temp)
 else:
     pass
 print("???", response)
 if response:
     st.write("Response:")
+
     st.write(response.json()['candidates'][0]['content']['parts'][0]['text'])
 
     # prompt_tokens = response["usage"]["prompt_tokens"]
