@@ -35,7 +35,7 @@ def make_response(text, temp):
     token_data = {
       "contents": [{
         "parts":[{
-          "text": "Write a story about a magic backpack."}]}]}
+          "text": text}]}]}
     num_tokens = requests.post(url_token, headers=headers, json=token_data).json()["totalTokens"]
 
     data = {
