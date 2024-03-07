@@ -1,4 +1,4 @@
-y# from decouple import config
+# from decouple import config
 # import openai
 import requests
 response = False
