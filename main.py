@@ -1,5 +1,4 @@
-import streamlit as st
-# from decouple import config
+y# from decouple import config
 # import openai
 import requests
 response = False
@@ -10,7 +9,7 @@ cost_of_response = 0
 
 # API_KEY = config('OPENAI_API_KEY')
 # openai.api_key = API_KEY
-API_KEY = "AIzaSyDo7DTaM8MCyuz-nYhmXtunjj6vK6US3MA"
+API_KEY = "AIzaSyBf6fF60y5otaVglEvQy6njhr7QJPjn7SA"
 # API_KEY = sys.argv[1]
 url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=" + API_KEY
 url_token = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:countTokens?key=" + API_KEY
